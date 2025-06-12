@@ -25986,6 +25986,65 @@ Set blur strength. Default value is 128.
 @subsection Commands
 This filter supports same @ref{commands} as options.
 
+@section yazf
+
+Apply Zoom & Pan effect with floating point precision, without rewriting PTS, with possible dynamic output size all the while respecting the output size aspect ratio ("yazf" means "yet another zoompan filter").
+
+This filter accepts the following options:
+
+@table @option
+@item z
+Set the zoom expression. Range is 1-10. Default is 1.
+
+@item x
+@item y
+Set the x and y expression. Default is 0.
+
+@item w
+@item h
+Set the output frame width and height expression. Default is 1.
+@end table
+
+Each expression can contain the following constants:
+
+@table @option
+@item in_w, iw
+Input width.
+
+@item in_h, ih
+Input height.
+
+@item n
+Input frame count.
+
+@item t
+The input timestamp expressed in seconds.
+@end table
+
+Additionally x and y expressions can contain the following constants:
+
+@table @option
+@item z
+Last calculated zoom from 'z' expression for current input frame.
+
+@item zw
+Last calculated zoom width for current input frame.
+
+@item zh
+Last calculated zoom height for current input frame.
+@end table
+
+@subsection Examples
+
+@itemize
+@item
+Zoom in 2x into center of picture for first 30 frames:
+@example
+yazf=x='(iw/2)-(zw/2)':y='(ih/2)-(zh/2)':z='min(2, 1+n*/30)':w=1080:h=1080"
+@end example
+
+@end itemize
+
 @section zoompan
 
 Apply Zoom & Pan effect.
